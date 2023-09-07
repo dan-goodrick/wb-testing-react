@@ -16,7 +16,14 @@ const server = setupServer(
     );
   }),
   rest.get("/api/movies/:movieId", (req, res, ctx) => {
-    return res(ctx.json({ title:"Test Movie", posterPath:"some path", overview:"blah, blah, blah", movieId: 1 }));
+    return res(
+      ctx.json({
+        title: "Test Movie",
+        posterPath: "some path",
+        overview: "blah, blah, blah",
+        movieId: 1,
+      })
+    );
   })
 );
 
@@ -60,7 +67,9 @@ describe("Test Page Navigation", () => {
     render(<App />);
     await user.click(screen.getByRole("link", { name: /all movies/i }));
     await user.click(screen.getByRole("link", { name: /test movie/i }));
-    expect(screen.getByRole("heading", { name: /test movie/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /test movie/i })
+    ).toBeInTheDocument();
   });
 });
 
@@ -72,26 +81,42 @@ describe("test Login", () => {
       })
     );
     render(<App />);
-    await user.click(screen.getByRole('link', {name: /log in/i}))
-    await user.type(screen.getByRole('textbox', {name: /email:/i}), 'user1@test.com')
-    await user.type(screen.getByLabelText(/password:/i), 'test')
-    await user.click(screen.getByRole('button', {name: /log in/i}))
-    expect(screen.getByRole("heading", { name: /your ratings/i })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: /log in/i }));
+    await user.type(
+      screen.getByRole("textbox", { name: /email:/i }),
+      "user1@test.com"
+    );
+    await user.type(screen.getByLabelText(/password:/i), "test");
+    await user.click(screen.getByRole("button", { name: /log in/i }));
+    expect(
+      screen.getByRole("heading", { name: /your ratings/i })
+    ).toBeInTheDocument();
   });
 });
 describe("tests create rating", () => {
-  test("creating a rating redirects to ratings page", async () => {
+  test("creating a rating redirects to user ratings page", async () => {
+    // Route for creating a rating
     server.use(
       rest.post("/api/ratings", (req, res, ctx) => {
-        return res(ctx.json({ ratingId: 1, score: 2}));
+        return res(ctx.json({ ratingId: 1, score: 2 }));
       })
     );
+
     render(<App />);
-     user.click(screen.getByRole("link", { name: /all movies/i }));
-    await user.click(screen.getByRole('link', {name: /all movies/i}))
-     fireEvent.change(screen.getByRole('combobox', {name: /score:/i}), {target: {value: '1'}})
-    await user.click(screen.getByRole('button', {name: /submit/i}))
-    expect(screen.getByRole("heading", { name: /your ratings/i })).toBeInTheDocument();
+    const user = userEvent.setup();
+
+    // Navigate to movie detail page
+    await user.click(screen.getByRole("link", { name: /all movies/i }));
+    await user.click(screen.getByRole("link", { name: /test movie/i }));
+    // Create a rating
+    fireEvent.change(screen.getByRole("combobox", { name: /score/i }), {
+      target: { value: "1" },
+    });
+    await user.click(screen.getByRole("button", { name: /submit/i }));
+    // Redirects to user ratings page
+    expect(
+      screen.getByRole("heading", { name: /your ratings/i })
+    ).toBeInTheDocument();
   });
 });
 
