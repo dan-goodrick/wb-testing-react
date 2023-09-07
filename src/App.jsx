@@ -12,10 +12,11 @@ import IndexPage from './pages/IndexPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import MovieDetailPage from './pages/MovieDetailPage.jsx';
 import YourRatingsPage from './pages/YourRatingsPage.jsx';
+import Root from './pages/Root';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Route />} errorElement={<ErrorPage />}>
+    <Route path="/" element={<Root />} errorElement={<ErrorPage />}>
       {/* Homepage */}
       <Route index element={<IndexPage />} />
 
