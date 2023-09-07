@@ -5,15 +5,9 @@ import App from "../App";
 import userEvent from "@testing-library/user-event";
 
 const server = setupServer(
-  rest.get("/api/movies", (req, res, ctx) => {
-    return res(ctx.json([{ movieId: 1, title: "Test Movie" }]));
-  }),
+  rest.get("/api/movies", (req, res, ctx) => res(ctx.json([{ movieId: 1, title: "Test Movie" }]))),
   rest.get("/api/ratings", (req, res, ctx) => {
-    return res(
-      ctx.json([
-        { ratingId: 1, score: 2, movie: { title: "Test Movie" }, movieId: 1 },
-      ])
-    );
+    return res(ctx.json([{ ratingId: 1, score: 2, movie: { title: "Test Movie" }, movieId: 1 },]));
   }),
   rest.get("/api/movies/:movieId", (req, res, ctx) => {
     return res(ctx.json({ title:"Test Movie", posterPath:"some path", overview:"blah, blah, blah", movieId: 1 }));
