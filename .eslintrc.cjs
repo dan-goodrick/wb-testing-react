@@ -15,5 +15,6 @@ module.exports = {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'react/prop-types': 'off',
     'no-await-in-loop': 'off',
+    'max-len': ['error', { 'code': 120 }],
   },
 };
