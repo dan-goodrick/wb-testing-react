@@ -17,7 +17,9 @@ const server = setupServer(
   }),
   rest.get("/api/movies/:movieId", (req, res, ctx) => {
     return res(ctx.json({ title:"Test Movie", posterPath:"some path", overview:"blah, blah, blah", movieId: 1 }));
-  })
+  }),
+  rest.post("/api/auth", (req, res, ctx) => res(ctx.json({ success: true }))),
+  rest.post("/api/ratings", (req, res, ctx) => res(ctx.json({ ratingId: 1, score: 2})))
 );
 
 beforeAll(() => server.listen());
@@ -66,11 +68,6 @@ describe("Test Page Navigation", () => {
 
 describe("test Login", () => {
   test("logging in redirects to ratings page", async () => {
-    server.use(
-      rest.post("/api/auth", (req, res, ctx) => {
-        return res(ctx.json({ success: true }));
-      })
-    );
     render(<App />);
     await user.click(screen.getByRole("link", {name: /log in/i}))
     await user.type(screen.getByRole("textbox", {name: /email:/i}), "user1@test.com")
@@ -81,11 +78,6 @@ describe("test Login", () => {
 });
 describe("tests create rating", () => {
   test("creating a rating redirects to ratings page", async () => {
-    server.use(
-      rest.post("/api/ratings", (req, res, ctx) => {
-        return res(ctx.json({ ratingId: 1, score: 2}));
-      })
-    );
     render(<App />);
     await user.click(screen.getByRole("link", { name: /all movies/i }));
     await user.click(screen.getByRole("link", {name: /test movie/i}))
